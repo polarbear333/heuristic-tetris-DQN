@@ -1,0 +1,2 @@
+Episode,Avg_Reward,Epsilon,Steps,Lines_Cleared,Max_Height,Action_Counts
+10,19.97,0.9991,39,0,20,"rotate:11|hard_drop:11|right:5|down:8|left:4"
