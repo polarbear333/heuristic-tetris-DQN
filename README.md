@@ -142,7 +142,7 @@ The small per-step reward:
 
 #### Heuristic Guidance 🧭
 
-The DT-20 derived value function:
+The DT-20 derived value function (linear combination):
 
 $$V(s) = -2.68 \cdot \text{holes} + 1.38 \cdot \text{transitions} - 2.41 \cdot \text{wells} - \ldots + 0.05 \cdot \text{RBF}_4$$
 
@@ -286,14 +286,14 @@ python train.py --resume --model path/to/checkpoint.pth
 
 This table summarizes the agent's performance at different stages of training:
 
-```
+
 | Phase (Duration)        | Key Metrics          |
 |-------------------------|----------------------|
 | Warmup (0-1k episodes, ~2h) | Avg Score: 5k ± 3k   |
 | Learning (1k-5k episodes)  | Lines/Game: 42.7 ± 4.2 |
 | Maturation (5k-10k episodes) | Tetris Rate: 18.4%   |
 | Mastery (10k+ episodes)   | Survival Time: 25.2 ± 1.1 mins |
-```
+
 
 ## Future Enhancements
 
