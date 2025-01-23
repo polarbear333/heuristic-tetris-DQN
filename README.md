@@ -81,32 +81,29 @@ The CNN extracts high-level features from the grid, capturing spatial patterns a
 ### 2. Weighted Features (Strategic)
 In addition to the grid, we use a 14-dimensional feature vector that captures strategic aspects of the game state. These features are derived from domain knowledge in Tetris research (DT-20), which evaluates the state of the Tetris board by computing a weighted sum of various features that capture important aspects of the game state and are combined into a linear combination. The feature includes:
 
-| Feature           | Formula/Description                                                                                                                                  | Weight |
-|-------------------|------------------------------------------------------------------------------------------------------------------------------------------------------|--------|
-| Landing Height    | $y_\text{final}$ (final y position of placed piece)                                                                                                    | -2.682 |
-| Eroded Cells      | $\frac{\text{lines\_cleared} \times \text{piece\_cells}}{\text{lines\_cleared} \times \text{piece\_cells} + 1}$                                         | 1.383  |
-| Row Transitions   | $\sum_{\text{rows}} \mathbb{1}(\text{cell}_i \ne \text{cell}_{i+1})$                                                                                  | -2.414 |
-| Column Transitions | $\sum_{\text{cols}} \mathbb{1}(\text{cell}_j \ne \text{cell}_{j+1})$                                                                                | -6.325 |
-| Holes             | $\frac{\sum \text{empty\_below\_filled}}{\sum \text{empty\_below\_filled} + 2}$                                                                        | 2.036  |
-| Well Depth        | $\frac{\sum \text{well\_depths}^2}{\sum \text{well\_depths}^2 + 1}$                                                                                     | -2.717 |
-| Hole Depth        | $\max(\text{blocks\_above\_holes})$                                                                                                                    | -0.438 |
-| Rows with Holes    | $\sum (\text{row\_has\_hole})$                                                                                                                        | -9.489 |
-| Pattern Diversity | $\frac{\text{unique\_row\_patterns}}{20}$                                                                                                            | 0.891  |
-| RBF Heights       | $\sum \exp\left(-\frac{(h - \mu_i)^2}{2\sigma^2}\right) \quad (i = 0, ..., 4)$                                                                          | 0.05   |
+| Feature           | Formula/Description                                                                                         | Weight |
+|-------------------|-------------------------------------------------------------------------------------------------------------|--------|
+| Landing Height    | `y_final` (final y position of placed piece)                                                                | -2.682 |
+| Eroded Cells      | `(lines_cleared * piece_cells) / (lines_cleared * piece_cells + 1)`                                         | 1.383  |
+| Row Transitions   | `sum(rows, 1(cell_i != cell_i+1))`                                                                          | -2.414 |
+| Column Transitions | `sum(cols, 1(cell_j != cell_j+1))`                                                                         | -6.325 |
+| Holes             | `sum(empty_below_filled) / (sum(empty_below_filled) + 2)`                                                  | 2.036  |
+| Well Depth        | `sum(well_depths^2) / (sum(well_depths^2) + 1)`                                                             | -2.717 |
+| Hole Depth        | `max(blocks_above_holes)`                                                                                  | -0.438 |
+| Rows with Holes    | `sum(row_has_hole)`                                                                                       | -9.489 |
+| Pattern Diversity | `unique_row_patterns / 20`                                                                                 | 0.891  |
+| RBF Heights       | `sum(exp(-(h - mu_i)^2 / (2 * sigma^2))) where i = 0, ..., 4`                                              | 0.05   |
+
 
 **RBF Parameters**:
 
 The parameters for the Radial Basis Function (RBF) heights are defined as follows:
 
-$$
-\mu_i = 5i \quad (i = 0, 1, 2, 3, 4), \quad \sigma = 4
-$$
+$$\mu_i = 5i \quad (i = 0, 1, 2, 3, 4), \quad \sigma = 4$$\
 
 where
 
-$$
-h = \frac{1}{10}\sum_{c=0}^9 \text{col_height}_c
-$$
+$$h = \frac{1}{10}\sum_{c=0}^9 \text{col_height}_c$$
 
 
 # 🏆 Reward System Design
@@ -147,7 +144,7 @@ The small per-step reward:
 #### Heuristic Guidance 🧭
 
 The DT-20 derived value function:
-$$ V(s) = -2.68 \cdot \text{holes} + 1.38 \cdot \text{transitions} - 2.41 \cdot \text{wells} - \ldots + 0.05 \cdot \text{RBF}_4 $$
+$$V(s) = -2.68 \cdot \text{holes} + 1.38 \cdot \text{transitions} - 2.41 \cdot \text{wells} - \ldots + 0.05 \cdot \text{RBF}_4$$
 
 Steers the agent toward:
 
